@@ -1,0 +1,35 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://webapi.asianodds88.com/AsianOddsService/Login?password=0d05ee024b34f4108c44bbf783b0b4e3&username=webapiuser13
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.12.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '230'
+      Content-Type:
+      - application/json; charset=utf-8
+      Server:
+      - Microsoft-HTTPAPI/2.0
+      Date:
+      - Wed, 26 Apr 2017 10:24:16 GMT
+    body:
+      encoding: UTF-8
+      string: '{"Code":-1,"Message":null,"Result":{"Key":null,"Password":null,"SuccessfulLogin":false,"TextMessage":"Invalid
+        userid or password. Please check your login credentials and try again. ","Token":"","Url":"","Username":"WEBAPIUSER13"}}'
+    http_version: 
+  recorded_at: Wed, 26 Apr 2017 10:24:16 GMT
+recorded_with: VCR 3.0.3
