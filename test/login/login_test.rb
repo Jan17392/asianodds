@@ -8,17 +8,12 @@ class AsianoddsLoginTest < Minitest::Test
     assert Asianodds::Login
   end
 
-  def session_setup
-    @user = Asianodds::Login.new(USER, PASSWORD)
-    assert @user.code != nil
-  end
-
 
   # Check that the fields are accessible and the login was successful
   def test_login
+    @user = Asianodds::Login.new(USER, PASSWORD)
 
-
-    assert_equal Asianodds::Login, @user.class
+    assert @user.code == 0
     assert_equal 0, @user.code
 
 
