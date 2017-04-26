@@ -10,18 +10,19 @@ module Asianodds
 
     attr_reader :code, :ao_token, :ao_key, :base_url, :successful_login, :message
 
+    # -------------------------------------------------------------------------------------
     # Initialize the user with a username and password
     def initialize(user, password)
       @user = user
       @password = password
-
       # Asianodds requests the password to be MD5 hashed
       @password_md5 = Digest::MD5.hexdigest(@password)
 
-
-      self.login
+      login
     end
+    # -------------------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------------------
     # Log the user in to receive a token and key
     def login
       response = Faraday.get("#{BASE_API_URL}/Login?username=#{@user}&password=#{@password_md5}")
@@ -37,7 +38,9 @@ module Asianodds
       # All logged in users need to be registered with a token and key
       register
     end
+    # -------------------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------------------
     # With the token and key the user has to be registered
     def register
       response = Faraday.get "#{BASE_API_URL}/Register?username=#{@user}", {}, {
@@ -45,19 +48,19 @@ module Asianodds
         'AOToken': @ao_token,
         'AOKey': @ao_key
       }
-
-      p response
-
     end
+    # -------------------------------------------------------------------------------------
 
+    # -------------------------------------------------------------------------------------
     # Before executing any request which requires a logged in user (all), check for login
     def loggedin?
       response = Faraday.get "#{BASE_API_URL}/IsLoggedIn", {}, {'Accept': 'application/json', 'AOToken': @ao_token}
+      response = JSON.parse(response.body)
 
-      #p response
-      p response
+      # Return whether the user is logged in or not
+      response["Result"]["CurrentlyLoggedIn"] ? true : false
     end
-
+    # -------------------------------------------------------------------------------------
 
   # Check for all other requests whether user is logged in and if not, log her in
 

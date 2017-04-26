@@ -12,16 +12,20 @@ class AsianoddsLoginTest < Minitest::Test
   # Check that the fields are accessible and the login was successful
   def test_login
       user = Asianodds::Login.new(USER, PASSWORD)
-      if user.successful_login
-        p "juhu"
-        p user
-      else
-        p "fucking errors"
-      end
+
       assert_equal Asianodds::Login, user.class
       assert_equal 0, user.code
 
 
-      user.loggedin?
+      x = user.loggedin?
+      p "----------------- #{x} -------------------"
   end
+
+  # TODO: Write a test to check that user is logged in and registered if no error occurs
+
+  # TODO: Check the current budget method to return the right value
+
+  # TODO: Check that running bets return the right length of running bets
+
+  # TODO: Place bet should successfully register a new bet with the system
 end
