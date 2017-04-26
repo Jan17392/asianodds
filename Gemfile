@@ -11,4 +11,6 @@ group :development do
   gem 'bundler', '~> 1.13'
   gem 'rake', '~> 10.0'
   gem 'minitest'
+  gem 'byebug'
+  gem "figaro"
 end
