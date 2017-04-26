@@ -1,7 +1,15 @@
 # Asianodds
 
+This gem is not officially developed by Asianodds and does not belong in any way to the Asianodds service, nor is it supported by their development team and all rights to accept or deny bets made with this gem remain with Asianodds.
+
 This gem is a wrapper for the Asianodds Web API.
 In order to use this gem you need to apply for a Web API account with Asianodds (api@asianodds88.com). Please keep in mind that your regular Asianodds user (for the Web Interface) does not work for your API account and vice versa.
+
+The purpose of the gem is to preconfigure all API calls to make your life as easy as just calling one method. You won't need to MD5 hash your password (as Asianodds requests) and the gem assumes smart preconfigs for your calls, so they will work even without passing in required parameters.
+
+With just three lines of code you will be able to start placing real-time bets with multiple bookmakers and automate your trading strategies.
+
+For any bugs, ideas or feature requests don't hesitate to open an issue.
 
 For more information on the original API, please refer to the full documentation: https://asianodds88.com/documentation/
 
@@ -23,17 +31,16 @@ Or install it yourself as:
 
 ## Usage
 
-1. Login
+### Login
 
 Create a new User instance and provide your username and raw (not hashed) password:
 
-    $ user = Asianodds::Login.new(<user>, <password>)
+```ruby
+user = Asianodds::Login.new(<user>, <password>)
+```
 
-## Development
+### Registering
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
