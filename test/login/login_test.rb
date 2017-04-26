@@ -8,20 +8,28 @@ class AsianoddsLoginTest < Minitest::Test
     assert Asianodds::Login
   end
 
+  def session_setup
+    @user = Asianodds::Login.new(USER, PASSWORD)
+    assert @user.code != nil
+  end
+
 
   # Check that the fields are accessible and the login was successful
   def test_login
-      user = Asianodds::Login.new(USER, PASSWORD)
-
-      assert_equal Asianodds::Login, user.class
-      assert_equal 0, user.code
 
 
-      x = user.loggedin?
-      p "----------------- #{x} -------------------"
+    assert_equal Asianodds::Login, @user.class
+    assert_equal 0, @user.code
+
+
+    p @user.loggedin?
+
   end
 
   # TODO: Write a test to check that user is logged in and registered if no error occurs
+  def test_loggedin
+
+  end
 
   # TODO: Check the current budget method to return the right value
 
