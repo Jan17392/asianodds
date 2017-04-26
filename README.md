@@ -3,6 +3,8 @@
 This gem is a wrapper for the Asianodds Web API.
 In order to use this gem you need to apply for a Web API account with Asianodds (api@asianodds88.com). Please keep in mind that your regular Asianodds user (for the Web Interface) does not work for your API account and vice versa.
 
+For more information on the original API, please refer to the full documentation: https://asianodds88.com/documentation/
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -21,7 +23,11 @@ Or install it yourself as:
 
 ## Usage
 
-Login to AsianOdds
+1. Login
+
+Create a new User instance and provide your username and raw (not hashed) password:
+
+    $ user = Asianodds::Login.new(<user>, <password>)
 
 ## Development
 
