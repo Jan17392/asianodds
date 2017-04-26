@@ -36,7 +36,9 @@ module Asianodds
       @message = attributes["Result"]["TextMessage"]
 
       # All logged in users need to be registered with a token and key
-      register
+      if @successful_login
+        register
+      end
     end
     # -------------------------------------------------------------------------------------
 
@@ -51,10 +53,20 @@ module Asianodds
     end
     # -------------------------------------------------------------------------------------
 
+    def logout
+      response = Faraday.get "#{BASE_API_URL}/Logout", {}, {
+        'Accept': 'application/json',
+        'AOToken': @ao_token
+      }
+    end
+
     # -------------------------------------------------------------------------------------
     # Before executing any request which requires a logged in user (all), check for login
     def loggedin?
-      response = Faraday.get "#{BASE_API_URL}/IsLoggedIn", {}, {'Accept': 'application/json', 'AOToken': @ao_token}
+      response = Faraday.get "#{BASE_API_URL}/IsLoggedIn", {}, {
+        'Accept': 'application/json',
+        'AOToken': @ao_token
+      }
       response = JSON.parse(response.body)
 
       # Return whether the user is logged in or not
@@ -63,6 +75,28 @@ module Asianodds
     # -------------------------------------------------------------------------------------
 
   # Check for all other requests whether user is logged in and if not, log her in
+
+    def getfeeds(arguments)
+      arguments[:sports_type].nil? ? sports_type = 1 : sports_type = arguments[:sports_type]
+      arguments[:market_type].nil? ? market_type = 1 : market_type = arguments[:market_type]
+      arguments[:bookies].nil? ? bookies = "ALL" : bookies = arguments[:bookies]
+      arguments[:leagues].nil? ? leagues = "ALL" : leagues = arguments[:leagues]
+      arguments[:odds_format].nil? ? odds_format = "00" : odds_format = arguments[:odds_format]
+      arguments[:since].nil? ? since = "0" : since = arguments[:since]
+
+      if loggedin?
+        response = Faraday.get "#{BASE_API_URL}/GetFeeds?sportsType=#{sports_type}&marketTypeId=#{market_type}&bookies=#{bookies}&leagues=#{leagues}&oddsFormat=#{odds_format}&since=#{since}", {}, {
+          'Accept': 'application/json',
+          'AOToken': @ao_token
+        }
+        response = JSON.parse(response.body)
+
+        return response
+
+      else
+        #raise NotLoggedIn
+      end
+    end
 
 
 
