@@ -1,8 +1,6 @@
-# Asianodds
+# :soccer: Asianodds - Automated Sports Trading
 
-[![Code Climate](https://codeclimate.com/github/Jan17392/asianodds/badges/gpa.svg)](https://codeclimate.com/github/Jan17392/asianodds)
-
-Disclaimer: This gem is not officially developed by Asianodds and does not belong in any way to the Asianodds service, nor is it supported by their development team and all rights to accept or deny bets made with this gem remain with Asianodds.
+[![Gem Version](https://badge.fury.io/rb/asianodds.svg)](https://badge.fury.io/rb/asianodds) [![Code Climate](https://codeclimate.com/github/Jan17392/asianodds/badges/gpa.svg)](https://codeclimate.com/github/Jan17392/asianodds)
 
 This gem is a wrapper for the Asianodds Web API.
 In order to use this gem you need to apply for a Web API account with Asianodds (api@asianodds88.com). Please keep in mind that your regular Asianodds user (for the Web Interface) does not work for your API account and vice versa.
@@ -12,6 +10,8 @@ The purpose of the gem is to pre-configure all API calls to make your life as ea
 With just three lines of code you will be able to start placing real-time bets with multiple bookmakers and automate your trading strategies.
 
 For any bugs, ideas or feature requests don't hesitate to open an issue.
+
+*Disclaimer: This gem is not officially developed by Asianodds and does not belong in any way to the Asianodds service, nor is it supported by their development team and all rights to accept or deny bets made with this gem remain with Asianodds.*
 
 
 ## Installation
@@ -141,6 +141,21 @@ asianodds.get_leagues
 
 ```ruby
 asianodds.get_sports
+# Example Response:
+#{
+#  "Code": 0,
+#  "Data": [
+#    {
+#      "Id": 1,
+#      "Name": "Football"
+#    },
+#    {
+#      "Id": 2,
+#      "Name": "Basketball"
+#    }
+#  ],
+#  "Message": ""
+#}
 ```
 
 
