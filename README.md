@@ -92,6 +92,93 @@ asianodds.logout
 |@result|string ('Failed Logout. Have you logged in before ?')|Verbose description of the action result|
 
 
+### Get Match Feeds
+
+The get_feeds method returns all matches with their respective feed information, (such as running minute, home team, away team etc.) filtered by optional parameters. Parameters have to communicated via a hash. Accepted parameters are:
+
+|Key|Value|Description|
+|---|-----|-----------|
+|sports_type|see get_sports|Which sports to show (default 1 - football)|
+|market_type|0 - Live, 1 - Today, 2 - Early|What betting market to receive (default 1 - Today)|
+|bookies|see get_bookies|From which bookies to show odds (default ALL)|
+|leagues|see get_leagues|From which leagues to receive matches (default ALL)|
+|odds_format|MY - Malaysian, 00 - European, HK - Hong Kong|What oddsformat to show (default 00 - European)|
+|since|tbd|Show only match feeds since the timestamp (default none)|
+
+```ruby
+asianodds.get_feeds({ sports_type: 1, market_type: 1, bookies: "ALL", leagues: "ALL", odds_format: "00" })
+# Works as well and returns the same result (due to auto-filters):
+asianodds.get_feeds({})
+
+=begin
+Response:
+{
+  Code: 0,
+  Message: "",
+  Result: {
+    Since: 1493301694214,
+    Sports: [
+      {
+        MatchGames: [
+          {
+            AwayTeam: {
+              Name: "Qaradag Lokbatan",
+              RedCards: 0,
+              Score: 1
+            },
+            ExpectedLength: 45,
+            Favoured: 1,
+            FullTimeHdp: {
+              BookieOdds: "IBC=0.530,-0.730;BEST=IBC 0.530,IBC -0.730",
+              Handicap: "0.0"
+            },
+            FullTimeOneXTwo: {
+              BookieOdds: ""
+            },
+            FullTimeOu: {
+              BookieOdds: "IBC=-0.310,0.090;BEST=IBC -0.310,IBC 0.090",
+              Goal: "3.5"
+            },
+            GameId: -1895622898,
+            HalfTimeHdp: {
+              BookieOdds: "",
+              Handicap: ""
+            },
+            HalfTimeOneXTwo: {
+              BookieOdds: ""
+            },
+            HalfTimeOu: {
+              BookieOdds: "",
+              Goal: ""
+            },
+            HomeTeam: {
+              Name: "PFC Turan Tovuz",
+              RedCards: 0,
+              Score: 2
+            },
+            InGameMinutes: 168,
+            IsActive: false,
+            IsLive: 1,
+            LeagueId: 922171774,
+            LeagueName: "AZERBAIJAN DIVISION 1",
+            MarketType: "Live",
+            MarketTypeId: 0,
+            MatchId: -1898629925,
+            StartTime: 1493294400000,
+            StartsOn: "04/27/2017 12:00:00.000 PM",
+            ToBeRemovedOn: 1493301984351,
+            UpdatedDateTime: 1493301684351,
+            WillBeRemoved: true
+          }
+        ],
+        SportsType: 1
+      }
+    ]
+  }
+}
+=end
+```
+
 ### Get Bets
 
 With the get_bets method all (max. 150) outstanding bets of the instantiated user are retrieved
@@ -99,6 +186,7 @@ With the get_bets method all (max. 150) outstanding bets of the instantiated use
 ```ruby
 asianodds.get_bets
 ```
+
 
 
 ### Get a Single Bet by its Reference
@@ -130,8 +218,28 @@ asianodds.get_non_running_bets
 
 ### Get Account Summary
 
+Getting the account summary of the current user helps to see the current credit, currency and P&L. No additional parameters need to be passed in if logged in.
+
 ```ruby
 asianodds.get_account_summary
+
+=begin
+{
+  Code: 0,
+  Message: null,
+  Result: {
+    Credit: 344.69,
+    CreditCurrency: 'EUR',
+    Message: 'Showing Account Summary for User WEBAPIUSER13',
+    Outstanding: 0,
+    OutstandingCurrency: 'EUR',
+    TodayPnL: 0,
+    TodayPnLCurrency: 'EUR',
+    YesterdayPnL: 44.69,
+    YesterdayPnLCurrency: 'EUR'
+  }
+}
+=end
 ```
 
 
@@ -144,24 +252,59 @@ asianodds.get_history_statement
 
 ### Get Bookies
 
+This method returns all bookies offered on the Asianodds books with their name and shortname/id. In all other methods a bookie is only referenced by its shortname (such as IBC).
+
 ```ruby
 asianodds.get_bookies
+# { Code: 0, Data: [{ Id: IBC, IsFeedAvailable: true, Name: "IBCBET"}, {...}], Message: "" }
 ```
 
 
 ### Get Leagues
 
+The get_leagues method returns all leagues offered on the Asianodds books, including the corresponding sports_type as well as an array of bookies offering bets in this league.
+
 ```ruby
 asianodds.get_leagues
+
+=begin
+{
+  Code: 0,
+  Message: "",
+  Result: {
+    Sports: [
+      {
+        League: [
+          {
+            Bookies: [
+              "IBC",
+              "PIN",
+              "ISN",
+              "SIN",
+              "SBO"
+            ],
+            LeagueId: 350374160,
+            LeagueName: "EGYPT PREMIER LEAGUE",
+            MarketTypeId: 0,
+            Since: 1493305406042
+          }
+        ],
+        SportsType: 1
+      }
+    ]
+  }
+}
+=end
 ```
 
 
 ### Get Sports
 
+This method returns all the sports offered on the Asianodds books. Currently Football (Soccer) and Basketball are offered. All sports are stored as hashes in the data array.
+
 ```ruby
 asianodds.get_sports
-# Example Response:
-# {:Code=>0, :Data=>[{:Id=>1, :Name=>"Football"}, {:Id=>2, :Name=>"Basketball"}], :Message=>""}
+# { Code: 0, Data: [{ Id: 1, Name: "Football" }, { Id: 2, Name: "Basketball" }], Message: "" }
 ```
 
 
@@ -169,6 +312,31 @@ asianodds.get_sports
 
 ```ruby
 asianodds.get_user_information
+
+=begin
+{
+  Code: 0,
+  Message: "",
+  Result: {
+    ActiveBookies: [
+      "IBC",
+      "SBO",
+      "SIN",
+      "ISN",
+      "PIN",
+      "GA"
+    ],
+    BaseCurrency: null,
+    CreationDate: 1472636844000,
+    DefaultStake: 0,
+    ExpiryDate: 4102444800000,
+    ExternalIp: "88.72.3.57",
+    OddsType: "MY",
+    Status: "Active",
+    UserId: "WEBAPIUSER13"
+  }
+}
+=end
 ```
 
 
@@ -200,6 +368,7 @@ asianodds.place_bet
 ```
 
 
+
 ## Original API Documentation
 
 For more information on the original API, please refer to the full documentation: https://asianodds88.com/documentation/
@@ -213,7 +382,6 @@ Please get in contact to showcase your examples here.
 ## TODOS
 
 - [ ] Develop logic to re-signin automatically if logout is discovered
-- [ ] Add XML support (anyone still using XML if JSON available?!)
 - [ ] Write proper mini-tests to ensure test coverage & error-handling
 - [ ] Enable custom IDs for easier get_bet_by_reference lookup
 - [ ] Improving get_feeds response to format odds and providers nicely (currently string)
