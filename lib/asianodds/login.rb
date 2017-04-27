@@ -11,7 +11,7 @@ module Asianodds
 
     # The API has a very standard request format for get requests - Use this one to stay DRY
     def get_request(route)
-      response = Faraday.get "#{BASE_API_URL}/#{route}", {}, {
+      response = Faraday.get "#{@base_url}/#{route}", {}, {
         'Accept': 'application/json',
         'AOToken': @ao_token,
         'AOKey': @ao_key
@@ -26,7 +26,7 @@ module Asianodds
       @password_md5 = Digest::MD5.hexdigest(@password)
       @ao_token = 'default'
       @ao_key = 'default'
-
+      @base_url = BASE_API_URL
       login
     end
 
@@ -49,7 +49,7 @@ module Asianodds
 
     # With the token and key the user has to be registered
     def register
-      return get_request('Register?username=#{@user}')
+      return get_request("Register?username=#{@user}")
     end
 
     # Before executing any request which requires a logged in user (all), check for login
@@ -191,7 +191,19 @@ module Asianodds
     # Get the ids for the sports offered by Asianodds (football and basketball as of today)
     def get_sports
       if loggedin?
-        return get_request('GetSports')
+        #sports_list = []
+
+        response = get_request('GetSports')
+
+        #for response['Data'].each do |sport|
+        #  sports_list <<
+        #end
+
+        #get_sports_result = {
+        #  code: response['Code'],
+
+        #}
+
       else
         #raise NotLoggedIn
       end
