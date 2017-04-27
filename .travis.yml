@@ -3,4 +3,4 @@ rvm:
   - 2.3.3
 
 cache: bundler
-script: test/spec.rb
+script: ruby test/spec.rb
