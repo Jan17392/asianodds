@@ -32,7 +32,7 @@ Or install it yourself as:
 
 ## Usage
 
-All returned objects from the gem are in the form of JSON (XML is not yet supported by the Gem).
+All returned objects from the gem are in the form of Ruby Hashes (or plain booleans if specified) with all Keys converted to Symbols.
 
 
 
@@ -41,18 +41,32 @@ All returned objects from the gem are in the form of JSON (XML is not yet suppor
 Create a new user instance and provide your username and raw password (not hashed):
 
 ```ruby
-asianodds = Asianodds::Login.new('dagobert_duck', 'fort_knox')
+asianodds = Asianodds::Login.new('dagobert_duck', 'secure_password')
+#
 ```
+The returned response / initiated user will contain the following keys:
+
+|Key|Value|Description|
+|---|-----|-----------|
+|@user|dagobert_duck|This is your username|
+|@password|secure_password|This is your password|
+|@password_md5|hashed MD5 password|The password actually used to login|
+|@ao_token|random string ('2220749911057835565404619834') or ('')|Token passed to execute all methods|
+|@ao_key|random string ('3c81574f865d1d892d52d7cbc78a18dd') or (nil)|Key used once to register - only valid for 60s|
+|@base_url|https://webapi.asianodds88.com/AsianOddsService|Used url base to access the Asianodds service|
+|@code|0 or -1|Indicator whether current action was successful: 0 = true, -1 = false|
+|@successful_login|boolean|Shows whether user is logged in successfully|
+|@message|string ('Successfully Registered.')|Verbose description of the current user status|
 
 
 ### Register
 
-With the instantiation of the login call, you will automatically get registered to the app. There is no need to call the register method separately.
+With the instantiation of the login call, you will automatically get registered to the app. There is no need to call the register method separately. The registration message can be read from the current users @message.
 
 
 ### Login Check
 
-You can check whether you are logged in to the service with the isloggedin? method
+You can check whether you are logged in to the service with the isloggedin? method. It returns either true if logged in or false if not.
 
 ```ruby
 asianodds.isloggedin?
@@ -69,8 +83,13 @@ After finishing all transactions and business logic, it is wise to logout and un
 
 ```ruby
 asianodds.logout
-# returns true or false
+# { Code: -1, Message: null, Result: "Failed Logout. Have you logged in before ?" }
 ```
+|Key|Value|Description|
+|---|-----|-----------|
+|@code|0 or -1|Indicator whether current action was successful: 0 = true, -1 = false|
+|@message|-|Can be omitted|
+|@result|string ('Failed Logout. Have you logged in before ?')|Verbose description of the action result|
 
 
 ### Get Bets
@@ -142,20 +161,7 @@ asianodds.get_leagues
 ```ruby
 asianodds.get_sports
 # Example Response:
-#{
-#  "Code": 0,
-#  "Data": [
-#    {
-#      "Id": 1,
-#      "Name": "Football"
-#    },
-#    {
-#      "Id": 2,
-#      "Name": "Basketball"
-#    }
-#  ],
-#  "Message": ""
-#}
+# {:Code=>0, :Data=>[{:Id=>1, :Name=>"Football"}, {:Id=>2, :Name=>"Basketball"}], :Message=>""}
 ```
 
 
