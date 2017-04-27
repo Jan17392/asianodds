@@ -16,7 +16,7 @@ module Asianodds
         'AOToken': @ao_token,
         'AOKey': @ao_key
       }
-      return JSON.parse(response.body)
+      return JSON.parse(response.body, :symbolize_names => true)
     end
 
     # Initialize the user with a username and password, as well as hashed password as requested from AO
@@ -33,23 +33,25 @@ module Asianodds
     # Log the user in to receive a token and key
     def login
       response = get_request("Login?username=#{@user}&password=#{@password_md5}")
-
-      @code = response['Code']
-      @ao_token = response['Result']['Token']
-      @ao_key = response['Result']['Key']
-      @base_url = response['Result']['Url']
-      @successful_login = response['Result']['SuccessfulLogin']
-      @message = response['Result']['TextMessage']
+      @code = response[:Code]
+      @ao_token = response[:Result][:Token]
+      @ao_key = response[:Result][:Key]
+      @base_url = response[:Result][:Url]
+      @successful_login = response[:Result][:SuccessfulLogin]
 
       # All logged in users need to be registered with a token and key
       if @successful_login
+        @message = "You successfully logged in - registering..."
         register
+      else
+        @message = response[:Result][:TextMessage]
       end
     end
 
     # With the token and key the user has to be registered
     def register
-      return get_request("Register?username=#{@user}")
+      response = get_request("Register?username=#{@user}")
+      response[:Result][:Success] == true ? @message = response[:Result][:TextMessage] : @message = "Registration failed"
     end
 
     # Before executing any request which requires a logged in user (all), check for login
@@ -57,7 +59,7 @@ module Asianodds
     def loggedin?
       if @ao_token
         response = get_request('IsLoggedIn')
-        return response['Result']['CurrentlyLoggedIn'] ? true : false
+        return response[:Result][:CurrentlyLoggedIn] ? true : false
       else
         return false
       end
@@ -65,12 +67,8 @@ module Asianodds
 
     # Log the user out. In order for this to work, the user must be logged in
     def logout
-      if loggedin?
-        response = get_request('Logout')
-        return response['Result']
-      else
-        return true
-      end
+      response = get_request('Logout')
+      return response[:Result]
     end
 
     # Get all the Match Feeds (odds, status, etc.) based on the settings provided
@@ -191,19 +189,7 @@ module Asianodds
     # Get the ids for the sports offered by Asianodds (football and basketball as of today)
     def get_sports
       if loggedin?
-        #sports_list = []
-
-        response = get_request('GetSports')
-
-        #for response['Data'].each do |sport|
-        #  sports_list <<
-        #end
-
-        #get_sports_result = {
-        #  code: response['Code'],
-
-        #}
-
+        return get_request('GetSports')
       else
         #raise NotLoggedIn
       end
