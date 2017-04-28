@@ -19,6 +19,19 @@ module Asianodds
       return JSON.parse(response.body, :symbolize_names => true)
     end
 
+    # The API has a very standard request format for post requests - Use this one to stay DRY
+    def post_request(route, body)
+      response = Faraday.post "#{@base_url}/#{route}",
+      body,
+      {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'AOToken': @ao_token
+      }
+
+      return JSON.parse(response.body, :symbolize_names => true)
+    end
+
     # Initialize the user with a username and password, as well as hashed password as requested from AO
     def initialize(user, password)
       @user = user
@@ -213,19 +226,19 @@ module Asianodds
     # Get information about the odds, minimum and maximum amounts to bet etc. for a certain match
     # THIS IS A POST REQUEST
     def get_placement_info(attributes)
-      # post body = {
-      # "GameId":{gameId from feed},
-      # "GameType":"{H|O|X}",
-      # "IsFullTime":{1|0},
-      # "Bookies":"SIN,GA,..",
-      # “MarketTypeId”:{0,1,2},
-      # "OddsFormat":"{MY|00|HK}",
-      # "OddsName":"{oddsName}",
-      # "SportsType":{sportsType}
-      # }
-      # Remember to convert the body to_json
+      body = {
+        "GameId": attributes[:game_id],
+        "GameType": attributes[:game_type],
+        "IsFullTime": attributes[:is_full_time],
+        "Bookies": attributes[:bookies],
+        "MarketTypeId": attributes[:market_type],
+        "OddsFormat": attributes[:odds_format],
+        "OddsName": attributes[:odds_name],
+        "SportsType": attributes[:sports_type]
+      }.to_json
+
       if loggedin?
-        return get_request('GetPlacementInfo')
+        return post_request('GetPlacementInfo', body)
       else
         #raise NotLoggedIn
       end
@@ -234,22 +247,23 @@ module Asianodds
     # Get information about the odds, minimum and maximum amounts to bet etc. for a certain match
     # THIS IS A POST REQUEST
     def place_bet(attributes)
-      # post body =   {
-        # "PlaceBetId":"{uniqueID (optional)}",
-        # "GameId":{gameId from feed},
-        # "GameType":"{H|O|X}",
-        # "IsFullTime":{1|0},
-        # “MarketTypeId”:{0,1,2},
-        # "OddsFormat":"{MY|00|HK}",
-        # "OddsName":"{oddsName}",
-        # "SportsType":{sportsType},
-        # "AcceptChangedOdds":{1|0},
-        # "BookieOdds":"ISN:-0.84,SBO:-0.75,..",
-        # "Amount":5
-        # }
-      # Remember to convert the body to_json
+      body = {
+        "GameId": attributes[:game_id],
+        "GameType": attributes[:game_type],
+        "IsFullTime": attributes[:is_full_time],
+        "Bookies": attributes[:bookies],
+        "MarketTypeId": attributes[:market_type],
+        "OddsFormat": attributes[:odds_format],
+        "OddsName": attributes[:odds_name],
+        "SportsType": attributes[:sports_type],
+        "BookieOdds": attributes[:bookie_odds],
+        "Amount": attributes[:amount]
+      }.to_json
+
       if loggedin?
-        return get_request('PlaceBet')
+        # Always needs to be called before placing the bet
+        get_placement_info(attributes)
+        return post_request('PlaceBet', body)
       else
         #raise NotLoggedIn
       end

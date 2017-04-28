@@ -358,6 +358,41 @@ asianodds.get_matches
 
 ```ruby
 asianodds.get_placement_info
+
+=begin
+{
+  Code: 0,
+  Message: "",
+  Result: {
+    OddsPlacementData: [
+      {
+        AwayName: "Manchester United",
+        AwayScore: 0,
+        Bookie: "IBC",
+        Code: 0,
+        Currency: "EUR",
+        GameType: "X",
+        HDPorGoal: "",
+        HomeName: "Manchester City",
+        HomeOrAwayOrDraw: "H",
+        HomeScore: 0,
+        IsFullTime: true,
+        LeagueName: "*ENGLISH PREMIER LEAGUE",
+        MarketTypeId: 1,
+        MaximumAmount: 5491,
+        Message: null,
+        MinimumAmount: 4,
+        OddPlacementId: "1297190352",
+        Odds: 1.92,
+        OddsFormat: "00",
+        Rejected: false,
+        SportsType: 1
+      },
+      {...}
+    ]
+  }
+}
+=end
 ```
 
 

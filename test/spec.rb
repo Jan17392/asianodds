@@ -1,6 +1,5 @@
 require 'minitest/autorun'
 require './lib/asianodds/login'
-require 'byebug'
 
 describe "Login" do
   before do
@@ -43,4 +42,62 @@ describe "Login" do
   #  x = @user.get_sports
   #  p x
   #end
+
+  # it "A valid get placement info post request returns a valid object" do
+  #   x = @user.get_placement_info({
+  #     game_id: -377682094,
+  #     game_type: "X",
+  #     is_full_time: 1,
+  #     market_type: 1,
+  #     odds_format: "00",
+  #     odds_name: "HomeOdds",
+  #     sports_type: 1
+  #     })
+
+  #   p x
+  # end
+
+  it "A valid place bet post request returns a valid object" do
+    x = @user.place_bet({
+      game_id: -377682094,
+      game_type: "X",
+      is_full_time: 1,
+      market_type: 1,
+      odds_format: "00",
+      odds_name: "HomeOdds",
+      sports_type: 1,
+      amount: 50,
+      bookie_odds: "PIN: 2.57,PIN: 3.06,PIN: 3.23"
+      })
+
+    p x
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
